@@ -211,6 +211,11 @@ def collate_fn(
 def main():
     parser = TrlParser((AriaSFTScriptArguments, SFTConfig, AriaModelConfig))
     sft_script_args, training_args, model_config = parser.parse_args_and_config()
+
+    print(f"sft_script_args is {sft_script_args}")
+    print(f"training_args is {training_args}")
+    print(f"model_config is {model_config}")
+
     training_args.gradient_checkpointing_kwargs = dict(use_reentrant=False)
     training_args.dataset_text_field = ""  # need a dummy field
     training_args.remove_unused_columns = False

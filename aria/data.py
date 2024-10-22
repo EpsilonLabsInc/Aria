@@ -183,6 +183,9 @@ def load_local_dataset(path, num_proc=8):
             - text: str, the text content if type is "text"
     - images: List of image file paths relative to the respective JSONL file
     """
+
+    print(f"num_proc is {num_proc}")
+
     if not os.path.exists(f"{path}/train.jsonl"):
         raise FileNotFoundError(f"train.jsonl not found in {path}")
 
@@ -190,7 +193,8 @@ def load_local_dataset(path, num_proc=8):
         if item["images"] and item["video"]:
             assert False, "Simultaneous input of images and video is not supported."
         if item["images"] is not None:
-            item["images"] = [f"{path}/{image}" for image in item["images"]]
+            if not 'gpt' in path:
+                item["images"] = [f"{path}/{image}" for image in item["images"]]
         if item["video"] is not None:
             if (item["video"]["num_frames"] is None) or item["video"][
                 "num_frames"
@@ -251,7 +255,7 @@ def mix_datasets(
     raw_test_datasets = []
     for dataset_path, frac in dataset_config.items():
         frac = float(frac)
-        print(dataset_path)
+        print("dataset_path is", dataset_path)
         ds = load_local_dataset(dataset_path)
 
         if "train" in ds:
